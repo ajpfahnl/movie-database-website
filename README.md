@@ -2,7 +2,7 @@
 
 The aim of this project is to create a fully functioning Movie Database with PHP, the Apache Web server, and MySQL (MariaDB).
 
-# Setup Docker
+# Setup
 Replace `your_shared_dir` with a directory on your local machine that will be linked to `/home/cs143/shared/` in the Docker container.
 ```console
 $ docker container rm mysql-apache
