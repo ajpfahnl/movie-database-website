@@ -5,6 +5,7 @@
 <?php
 echo "This is MySQL-Apache Container built for CS143. ";
 echo "We hope you enjoy this container as much as we do.";
+echo "Yay";
 ?>
 </body>
 </html>
