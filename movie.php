@@ -1,9 +1,5 @@
 <html>
-
-<head>
-<title>Movie</title>
-</head>
-
+<head><title>Movie</title></head>
 <body>
 <?php
 $servername = "localhost";
