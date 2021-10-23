@@ -35,9 +35,10 @@ echo "<h1>Actors Involved</h1>";
 $movie_actor_sql = "SELECT aid, role FROM MovieActor WHERE mid={$_GET["id"]}";
 $movie_actor_result = $conn->query($movie_actor_sql);
 if ($movie_actor_result->num_rows > 0) {
-    echo "<table><tr><th>ID</th><th>Role</th></tr>";
+    echo "<table><tr><th>Role</th><th>Name</th></tr>";
     while ($row = $movie_actor_result->fetch_assoc()) {
-        echo "<tr><td>{$row["aid"]}</td><td><a href=\"/actor.php?id={$row["aid"]}\">{$row["role"]}</a></td></tr>";
+        $actor = $conn->query("SELECT last, first FROM Actor WHERE id=" . $row["aid"])->fetch_assoc();
+        echo "<tr><td>{$row["role"]}</td><td><a href=\"/actor.php?id={$row["aid"]}\">{$actor["first"]} {$actor["last"]}</a></td></tr>";
     }
     echo "</table>";
 }
