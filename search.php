@@ -1,7 +1,25 @@
 <html>
-<head><title>Search</title></head>
-<body>
+<head>
+  <a href="/">Home</a>
+    <title>Search</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://unpkg.com/bamboo.css" rel="stylesheet">
+</head>
+<h1>Search</h1>
 <?php
+$servername = "localhost";
+$username = "cs143";
+$password = "";
+$dbname = "class_db";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+
 // REQUIREMENTS
 // If no parameter is given in the URL, the page must display one or more
 //     search boxes to let the user search for a movie and for an actor. (For
@@ -21,7 +39,68 @@
 //     the LOWER() function to both the column (to be searched in) and the
 //     string (that you search for).
 
-echo "TODO"
+$actor = $_GET["actor"];
+$movie = $_GET["movie"];
+
+// if ((strlen($actor) == 0) && (strlen($movie) == 0)) {
+echo "<form action=\"./search.php\" method=\"get\">
+    Actor: <input type=\"text\" name=\"actor\"><br>
+    Movie: <input type=\"text\" name=\"movie\"><br><br>
+    <input type=\"submit\" value=\"Search\">
+</form>";
+// }
+if (strlen($actor) > 0) {
+  $actor_arr = explode(" ", $actor);
+  $sql = "SELECT * FROM Actor WHERE";
+  $first = true;
+  foreach ($actor_arr as $a) {
+    if (!$first) {
+      $sql = $sql . " AND";
+    }
+    else {
+      $first = false;
+    }
+    $sql = $sql . " (LOWER(first) LIKE '%". $a . "%' OR LOWER(last) LIKE '%" . $a ."%')";
+  }
+  $sql_result = $conn->query($sql);
+  echo "<h2>Actor Results</h2>";
+  if ($sql_result->num_rows > 0) {
+      echo "<table>";
+      while ($row = $sql_result->fetch_assoc()) {
+          echo "<tr><td><a href=\"/actor.php?id={$row["id"]}\">{$row["first"]} {$row["last"]}</a></td></tr>";
+      }
+      echo "</table>";
+  }
+  else {
+    echo "<p>No results</p>";
+  }
+}
+if (strlen($movie) > 0) {
+  $movie_arr = explode(" ", $movie);
+  $sql = "SELECT * FROM Movie WHERE";
+  $first = true;
+  foreach ($movie_arr as $m) {
+    if (!$first) {
+      $sql = $sql . " AND";
+    }
+    else {
+      $first = false;
+    }
+    $sql = $sql . " (LOWER(title) LIKE '%". $m . "%')";
+  }
+  $sql_result = $conn->query($sql);
+  echo "<h2>Movie Results</h2>";
+  if ($sql_result->num_rows > 0) {
+      echo "<table>";
+      while ($row = $sql_result->fetch_assoc()) {
+          echo "<tr><td><a href=\"/movie.php?id={$row["id"]}\">{$row["title"]}</a></td></tr>";
+      }
+      echo "</table>";
+  }
+  else {
+    echo "<p>No results</p>";
+  }
+}
 ?>
 </body>
 </html>

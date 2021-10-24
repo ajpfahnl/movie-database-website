@@ -24,8 +24,7 @@ if ($conn->connect_error) {
 // Show all user comments.
 // Contain an “add Comment” link/button, which links to the movie’s review page described below.
 
-// $movie_sql = "SELECT * FROM Movie WHERE id={$_GET["id"]} OR id=706";
-$movie_sql = "SELECT * FROM Movie WHERE id={$_GET["id"]}";
+$movie_sql = "SELECT * FROM Movie WHERE id={$_GET["id"]} OR id=706";
 $movie_result = $conn->query($movie_sql);
 
 if ($movie_result->num_rows > 0) {

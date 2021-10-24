@@ -63,14 +63,18 @@ echo "curr_id = {$_GET["id"]} ";
 /////////////////////////////////////
 
 $actor2_sql = "SELECT * FROM MovieActor WHERE aid={$_GET["id"]}";
-$rs = $db->query($actor2_sql);
+$rs2 = $db->query($actor2_sql);
 
-while ($row = $rs->fetch_assoc()) { 
+while ($row = $rs2->fetch_assoc()) { 
     $mid = $row['mid']; 
     $role = $row['role'];
     print "$mid, $role<br>"; 
     // echo "$id, $first, $last, $sex, $dob, $dod<br>";
 }
+
+////////////////////////////////////
+$link = "SELECT * FROM Movie M LEFT OUTER JOIN MovieActor MA ON M.id=MA.mid";
+$rs3 = $db->query($link);
 
 /*
 if ($rs->num_rows > 0) {
