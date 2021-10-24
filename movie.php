@@ -7,6 +7,7 @@
     <link href="https://unpkg.com/bamboo.css" rel="stylesheet">
 </head>
 <body>
+<h1>Movie Information</h1>
 <?php
 $servername = "localhost";
 $username = "cs143";
@@ -37,7 +38,7 @@ if ($movie_result->num_rows > 0) {
   die("<p>Movie does not exist</p>");
 }
 
-echo "<h1>Actors Involved</h1>";
+echo "<h2>Actors Involved</h1>";
 $movie_actor_sql = "SELECT aid, role FROM MovieActor WHERE mid={$_GET["id"]}";
 $movie_actor_result = $conn->query($movie_actor_sql);
 if ($movie_actor_result->num_rows > 0) {
@@ -49,30 +50,28 @@ if ($movie_actor_result->num_rows > 0) {
     echo "</table>";
 }
 
-echo "<h1>User Review</h1>";
+echo "<h2>User Review</h1>";
+echo "<h3 style=\"text-align:center\"><a href=\"/review.php?id={$_GET["id"]}\">review page</a></h3>";
 $user_sql = "SELECT name, time, rating, AVG(rating) OVER() avg_rating, comment FROM Review WHERE mid={$_GET["id"]}";
 $user_result = $conn->query($user_sql);
 
-echo "<h2>average score</h2>";
 if ($user_result->num_rows > 0) {
     $avg_score = $user_result->fetch_assoc();
-    echo "<p>Average Score: {$avg_score["avg_rating"]}";
+    echo "<p><b>Average Rating</b>: {$avg_score["avg_rating"]}</p>";
 } else {
-    echo "<p>No reviews.</p>";
+    echo "<p>Average Rating: Not available</p>";
 }
 
-echo "<h2>comments</h2>";
 $user_result->data_seek(0);
 if ($user_result->num_rows > 0) {
-    echo "<table><tr><th>User</th><th>Comment</th></tr>";
+    echo "<table><tr><th>User</th><th>Comment</th><th>Rating</th><th>Time</th></tr>";
     while ($row = $user_result->fetch_assoc()) {
-        echo "<tr><td>{$row["name"]}</td><td>{$row["comment"]}</td></tr>";
+        echo "<tr><td>{$row["name"]}</td><td>{$row["comment"]}</td><td>{$row["rating"]}</td><td>{$row["time"]}</td></tr>";
     }
     echo "</table>";
 } else {
     echo "<p>No reviews.</p>";
 }
-echo "<h2><a href=\"/review.php?id={$_GET["id"]}\">review page</a></h2>";
 ?>
 
 </body>
