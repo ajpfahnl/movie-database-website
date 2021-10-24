@@ -1,13 +1,11 @@
 <html>
-<head><title>Actor</title></head>
-
-<style>
-table, th, td {
-  border: 0.5px solid black;
-}
-</style>
+<head>
+  <a href="/">Home</a>
+    <title>Actor</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://unpkg.com/bamboo.css" rel="stylesheet">
 </head>
-
 <body>
 <?php
 
