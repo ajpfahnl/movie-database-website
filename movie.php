@@ -34,7 +34,7 @@ if ($movie_result->num_rows > 0) {
     echo "<h1>" . $row["title"]. "</h1>";
     echo "<p>" . $row["year"] . ", " . $row["rating"] . ", " . $row["company"] . "</p>";
 } else {
-  die("Movie does not exist");
+  die("<p>Movie does not exist</p>");
 }
 
 echo "<h1>Actors Involved</h1>";
