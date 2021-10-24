@@ -1,5 +1,13 @@
 <html>
 <head><title>Actor</title></head>
+
+<style>
+table, th, td {
+  border: 0.5px solid black;
+}
+</style>
+</head>
+
 <body>
 <?php
 
@@ -39,13 +47,23 @@ if ($db->connect_errno > 0) {
 // echo "TODO";
 // echo "NOT FINISHED";
 
-
 // $actor_sql = "SELECT * FROM Actor id={$_GET["id"]} OR id=4033"
-
 // $actor_sql = "SELECT * FROM Actor WHERE id=14142";
-$actor_sql = "SELECT * FROM Actor WHERE id={$_GET["id"]}";
-$rs = $db->query($actor_sql);
 
+echo "<h1>Actor Information Page:</h1>";
+echo "<hr>";
+echo "<h2>Actor Information Is: </h2>";
+
+echo "<table>
+        <tr>
+            <th>Name</th>
+            <th>Sex</th>
+            <th>Date of Birth</th>
+            <th>Date of Death</th>
+        </tr>";
+
+$actor_sql = "SELECT DISTINCT * FROM Actor WHERE first<>'NULL' AND id={$_GET["id"]}";
+$rs = $db->query($actor_sql);
 
 while ($row = $rs->fetch_assoc()) { 
     $aid = $row['id']; 
@@ -54,32 +72,76 @@ while ($row = $rs->fetch_assoc()) {
     $sex = $row['sex'];
     $dob = $row['dob'];
     $dod = $row['dod'];
-    print "$aid, $first, $last, $sex, $dob, $dod<br>"; 
+
+    // echo gettype($dod), "\n";
+
+    $still_alive = "Still Alive";
+
+    if ($dod === NULL) {
+        $dod = $still_alive;
+    }
+
+    echo "<tr>
+            <td>$first $last</td>
+            <td>$sex</td>
+            <td>$dob</td> 
+            <td>$dod</td>
+        </tr>"; 
     // echo "$id, $first, $last, $sex, $dob, $dod<br>";
 }
 
-echo "curr_id = {$_GET["id"]} ";
-echo "test test";
+echo "</table>";
+
+// echo "curr_id = {$_GET["id"]} ";
+// echo "test test";
 
 /////////////////////////////////////
 
-$actor2_sql = "SELECT * FROM MovieActor WHERE aid={$_GET["id"]}";
+// $actor2_sql = "SELECT * FROM MovieActor WHERE aid={$_GET["id"]}";
+$actor2_sql = "SELECT DISTINCT * FROM Movie M LEFT OUTER JOIN MovieActor MA ON M.id=MA.mid WHERE title<>'NULL' AND MA.aid={$_GET["id"]}";
 $rs2 = $db->query($actor2_sql);
 
+echo "<h2>Actor's Movies and Role: </h2>";
+
+echo "<table>
+        <tr>
+            <th>Role</th>
+            <th>Title</th>
+        </tr>";
+
 while ($row = $rs2->fetch_assoc()) { 
-    $mid = $row['mid']; 
     $role = $row['role'];
-    print "$mid, $role<br>"; 
+    $title = $row['title']; 
+    echo "<tr>
+            <td>\"$role\"</td>
+            <td>
+                <a href=\"/movie.php?id={$row["mid"]}\">
+                    {$row['title']}
+                </a>
+            </td>
+        </tr>"; 
     // echo "$id, $first, $last, $sex, $dob, $dod<br>";
+
 }
 
+/*
+<td>$title</td>
+<td>{$title['title']}</td>
+<td>
+    <a href=\"/movie.php?title={$row["title"]}\"></a>
+</td>
+*/
+
+echo "</table>";
+
 ////////////////////////////////////
-$link = "SELECT * FROM Movie M LEFT OUTER JOIN MovieActor MA ON M.id=MA.mid";
-$rs3 = $db->query($link);
+
+// $link = "SELECT * FROM Movie M LEFT OUTER JOIN MovieActor MA ON M.id=MA.mid";
+// $rs3 = $db->query($link);
 
 /*
-if ($rs->num_rows > 0) {
-    $row = $rs->fetch_assoc()
+if ($rs3->num_rows > 0) {
+    $row = $rs3->fetch_assoc()
     $first = $row['first']; 
     $last = $row['last'];
     $sex = $row['sex'];
@@ -88,17 +150,6 @@ if ($rs->num_rows > 0) {
     echo "$id, $first, $last, $sex, $dob, $dod<br>";
 }
 */
-
-/*
-if ($rs -> num_rows > 0) {
-    $row = $rs->fetch_assoc();
-    echo "<h1>" . $row["title"]. "</h1>";
-    echo "<p>" . $row["year"] . ", " . $row["rating"] . ", " . $row["company"] . "</p>";
-} else {
-    die("Actor does not exist");
-}
-*/
-
 
 ?>
 </body>
