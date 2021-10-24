@@ -21,3 +21,11 @@ $ rm -rf www/
 $ ln -s shared/movie-database-website/ www
 ```
 Then go to [http://localhost:8888/](http://localhost:8888/) on your local machine and the website should be up and running.
+
+The following is an example search:
+
+![search](./images/search.png)
+
+The following is an example query for information about a movie:
+
+![movie](./images/movie.png)
