@@ -59,6 +59,7 @@ while ($row = $rs->fetch_assoc()) {
 }
 
 echo "curr_id = {$_GET["id"]} ";
+echo "test test";
 
 /////////////////////////////////////
 
