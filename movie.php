@@ -1,9 +1,11 @@
 <html>
-
 <head>
-<title>Movie</title>
+    <a href="/">Home</a>
+    <title>Movie</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://unpkg.com/bamboo.css" rel="stylesheet">
 </head>
-
 <body>
 <?php
 $servername = "localhost";
@@ -24,7 +26,7 @@ if ($conn->connect_error) {
 // Show all user comments.
 // Contain an “add Comment” link/button, which links to the movie’s review page described below.
 
-$movie_sql = "SELECT * FROM Movie WHERE id={$_GET["id"]} OR id=706";
+$movie_sql = "SELECT * FROM Movie WHERE id={$_GET["id"]}";
 $movie_result = $conn->query($movie_sql);
 
 if ($movie_result->num_rows > 0) {
@@ -39,9 +41,10 @@ echo "<h1>Actors Involved</h1>";
 $movie_actor_sql = "SELECT aid, role FROM MovieActor WHERE mid={$_GET["id"]}";
 $movie_actor_result = $conn->query($movie_actor_sql);
 if ($movie_actor_result->num_rows > 0) {
-    echo "<table><tr><th>ID</th><th>Role</th></tr>";
+    echo "<table><tr><th>Role</th><th>Name</th></tr>";
     while ($row = $movie_actor_result->fetch_assoc()) {
-        echo "<tr><td>{$row["aid"]}</td><td><a href=\"/actor.php?id={$row["aid"]}\">{$row["role"]}</a></td></tr>";
+        $actor = $conn->query("SELECT last, first FROM Actor WHERE id=" . $row["aid"])->fetch_assoc();
+        echo "<tr><td>{$row["role"]}</td><td><a href=\"/actor.php?id={$row["aid"]}\">{$actor["first"]} {$actor["last"]}</a></td></tr>";
     }
     echo "</table>";
 }
