@@ -65,7 +65,7 @@ if (strlen($actor) > 0) {
   $sql_result = $conn->query($sql);
   echo "<h2>Actor Results</h2>";
   if ($sql_result->num_rows > 0) {
-      echo "<table><tr><th>Actor</tr>";
+      echo "<table>";
       while ($row = $sql_result->fetch_assoc()) {
           echo "<tr><td><a href=\"/actor.php?id={$row["id"]}\">{$row["first"]} {$row["last"]}</a></td></tr>";
       }
@@ -91,7 +91,7 @@ if (strlen($movie) > 0) {
   $sql_result = $conn->query($sql);
   echo "<h2>Movie Results</h2>";
   if ($sql_result->num_rows > 0) {
-      echo "<table><tr><th>Movie</tr>";
+      echo "<table>";
       while ($row = $sql_result->fetch_assoc()) {
           echo "<tr><td><a href=\"/movie.php?id={$row["id"]}\">{$row["title"]}</a></td></tr>";
       }

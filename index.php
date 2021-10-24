@@ -23,7 +23,7 @@
 <h2>Search Movie by ID</h2>
 <p>If you know the particular movie id, search here:</p>
 <form action="./movie.php" method="get">
-    id: <input type="text" name="id"><br>
+    <input type="text" name="id"><br>
     <input type="submit" value="Search">
 </form>
 
@@ -32,7 +32,7 @@
 <h2>Search Actor by ID</h2>
 <p>If you know the particular actor id, search here:</p>
 <form action="./actor.php" method="get">
-    id: <input type="text" name="id"><br>
+    <input type="text" name="id"><br>
     <input type="submit" value="Search">
 </form>
 
@@ -41,7 +41,7 @@
 <h2>Search Review by ID</h2>
 <p>If you know the particular review id, search here:</p>
 <form action="./review.php" method="get">
-    id: <input type="text" name="id"><br>
+    <input type="text" name="id"><br>
     <input type="submit" value="Search">
 </form>
 </body>
