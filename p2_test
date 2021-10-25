@@ -1,0 +1,125 @@
+#!/bin/bash
+TMP_DIR=/tmp/p2-grading/
+REQUIRED_FILES="actor.php movie.php search.php review.php sql/create.sql sql/load.sql"
+ZIP_FILE=project2.zip
+
+# exit the script with the provided error message
+function error_exit()
+{
+   echo "ERROR: $1" 1>&2
+   rm -rf ${TMP_DIR}
+   exit 1
+}
+
+# check if the given list of files exist
+function check_files()
+{
+    for FILE in $1; do
+        if [ ! -f ${FILE} ]; then
+            error_exit "Cannot find ${FILE} in $2"
+        fi
+    done
+}
+
+# retrieve a file from a URL (first argument) and check its SHA1 (second argument)
+# and save it in a directory (third argument) 
+function retrieve_file()
+{
+    URL=$1
+    SHA1=$2
+    RETRIEVE_DIR=$3
+    FILENAME=$(basename ${URL})
+    if [ -z ${RETRIEVE_DIR} ]; then
+        TESTFILE="${FILENAME}"
+    else
+        mkdir -p ${RETRIEVE_DIR}
+        TESTFILE="${RETRIEVE_DIR}/${FILENAME}"
+    fi
+
+    # check whether the file has already been retrieved and exists
+    if [ -f ${TESTFILE} ]; then
+        sha1sum ${TESTFILE} | grep ${SHA1} &> /dev/null
+        if [ $? -eq 0 ]; then
+            # the file already exists and its checksum matches
+            return
+        fi
+    fi
+
+    # the file does not exist. retrieve the file
+    curl -s ${URL} > ${TESTFILE}
+    if [ $? -ne 0 ]; then
+        error_exit "Failed to retrieve ${FILENAME} file"
+    fi
+    sha1sum ${TESTFILE} | grep ${SHA1} &> /dev/null
+    if [ $? -ne 0 ]; then
+        error_exit "Failed to retrieve ${FILENAME} file. Checksum mismatch."
+    fi
+}
+
+# use user-provided zip file name
+if [ $# -eq 1 ]; then
+    ZIP_FILE=$1
+fi
+
+if [ `whoami` != "cs143" ]; then
+     error_exit "You need to run this script within the container"
+fi
+
+# clean any existing files
+rm -rf ${TMP_DIR}
+mkdir ${TMP_DIR}
+
+# unzip the submission zip file 
+if [ ! -f ${ZIP_FILE} ]; then
+    error_exit "Cannot find $ZIP_FILE"
+fi
+unzip -q -d ${TMP_DIR} ${ZIP_FILE}
+if [ "$?" -ne "0" ]; then 
+    error_exit "Cannot unzip ${ZIP_FILE} to ${TMP_DIR}"
+fi
+
+# change directory to the grading folder
+cd ${TMP_DIR}
+
+# check the existence of the required files
+check_files "${REQUIRED_FILES}" "root folder of the zip file"
+
+echo "Removing all files in /home/cs143/www/grading/"
+rm -rf /home/cs143/www/grading
+if [ $? -ne 0 ]; then
+    error_exit "An error was encountered while cleaning up grading/ subdirectory"
+fi
+
+
+# drop existing tables
+echo "Dropping existing tables in the class_db database"
+echo "drop table if exists Movie, Actor, MovieGenre, MovieActor, Review;" | mysql class_db
+
+# Download the data.zip file into the sql diretory
+cd sql
+echo "Downloading and unzipping data.zip file to load database..."
+retrieve_file https://oak.cs.ucla.edu/classes/cs143/project1/data.zip 584e1c7069bb61c53de4d4ea0daed2eba2164dc8 .
+unzip data.zip
+
+# create and load the downloaded data into MySQL
+echo "Running your create.sql script..."
+mysql class_db < ./create.sql
+if [ $? -ne 0 ]; then
+    error_exit "An error was encountered while running your create.sql file"
+fi
+echo "Running your load.sql script..."
+mysql class_db < ./load.sql
+if [ $? -ne 0 ]; then
+    error_exit "An error was encountered while running your load.sql file"
+fi
+
+echo "Linking your submission to the grading/ subdirectory"
+ln -sf ${TMP_DIR} /home/cs143/www/grading
+if [ $? -ne 0 ]; then
+    error_exit "An error was encountered while linking to grading/"
+fi
+echo "All done!"
+echo ""
+echo "Please ensure that you have a fully functional Web site available"
+echo "at http://localhost:8888/grading/"
+exit 0
