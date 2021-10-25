@@ -11,6 +11,7 @@
 <body>
 <h1>Movie Website Database</h1>
 <p>This website contains movie information including the actors, and user reviews.</p>
+<hr>
 <h2>General Search</h2>
 <form action="./search.php" method="get">
     Actor: <input type="text" name="actor"><br>

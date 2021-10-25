@@ -8,6 +8,7 @@
 </head>
 <body>
 <h1>Movie Information</h1>
+<hr>
 <?php
 $servername = "localhost";
 $username = "cs143";

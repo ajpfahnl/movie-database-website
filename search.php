@@ -7,6 +7,7 @@
     <link href="https://unpkg.com/bamboo.css" rel="stylesheet">
 </head>
 <h1>Search</h1>
+<hr>
 <?php
 $servername = "localhost";
 $username = "cs143";
