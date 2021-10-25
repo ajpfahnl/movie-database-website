@@ -52,7 +52,7 @@ if ($movie_actor_result->num_rows > 0) {
 }
 
 echo "<h2>User Review</h1>";
-echo "<form style=\"text-align:center\" action=\"/review.php?id={$_GET["id"]}\">
+echo "<form style=\"text-align:center\" method=\"POST\" action=\"/review.php?id={$_GET["id"]}\">
     <input type=\"submit\" value=\"Add comment\" />
 </form>";
 $user_sql = "SELECT name, time, rating, AVG(rating) OVER() avg_rating, comment FROM Review WHERE mid={$_GET["id"]}";
