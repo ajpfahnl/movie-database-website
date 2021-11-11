@@ -17,7 +17,7 @@ In your container, git clone this repository into your shared directory, then re
 $ cd ~/shared/
 $ git clone https://github.com/ajpfahnl/movie-database-website.git
 $ cd ../
-$ rm -rf www/
+$ rm -rf www
 $ ln -s shared/movie-database-website/ www
 ```
 Then go to [http://localhost:8888/](http://localhost:8888/) on your local machine and the website should be up and running.
